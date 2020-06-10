@@ -1,0 +1,67 @@
+package com.du;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class ZTest {
+
+	/**
+	 * 1.Activity工作流未做过了解
+	 * 2.未使用过springcloud，前公司用的类似于dubbo的rpc框架，开发过程中要考虑要对方调用的情况，也就是要对接口的性能作出评估与保证，
+	 * 对于异常，首先要打印相应的异常日志，明确表明异常原因，以及返回给调用方异常code与相应描述。
+	 * 3.实现conparable接口，重写compareTo。或者在排序时如一个匿名类，comparator 4.java
+	 * serializable主要作用用于序列化java对象，便于网络间传输。
+	 * ==比较的是内存地址（基本数据类型比较的是值），equal需要自己重写（一般用于比较对象间各属性是否相等），两者主要在hash表的实现有明显区别 5.有
+	 * 6.日志记录，我们一般是 打印 [类名] 方法名 -> 具体原因，以及相关参数，捕获的异常 7.可以，事务单独提交。 9.如下
+	 * 
+	 */
+	static List<Integer> sortList = new ArrayList<Integer>();
+	
+	public static void printNums(int n) {
+		if (n <= 0)
+			return;
+		int[] array = new int[n];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = i+1;
+		}
+		printNums(array,0,array.length-1);
+		
+		Collections.sort(sortList, new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				// TODO Auto-generated method stub
+				return o1 - o2;
+			}
+		});
+		System.out.println(sortList.toString());
+	}
+	
+	private static void printNums(int[] array, int curCount, int n) {
+		if (curCount == n) {
+			int sum = 0;
+			for (int i = 0; i < array.length; i++) {
+				sum = sum * 10 + array[i];
+			}
+			sortList.add(sum);
+			return;
+		}
+		for (int i = curCount; i < n + 1; i++) {
+			swap(array, curCount, i);
+			printNums(array, curCount + 1, n);
+			swap(array, curCount, i);
+		}
+	}
+
+	private static void swap(int[] array, int a, int b) {
+		int c = array[a];
+		array[a] = array[b];
+		array[b] = c;
+	};
+
+	public static void main(String[] args) {
+		printNums(4);
+	}
+}
